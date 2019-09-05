@@ -1,0 +1,16 @@
+/*change font of header title */
+nav a {
+  font-family: 'Lobster', cursive;
+  font-size: 2em !important;
+  color: white !important;
+}
+
+/* center table header */
+table th {
+  text-align: center;
+}
+
+/*center table rows */
+table td {
+  text-align: center;
+}

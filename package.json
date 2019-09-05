@@ -1,0 +1,31 @@
+{
+  "name": "hotornot",
+  "version": "1.0.0",
+  "description": "File compare tool",
+  "main": "ImageFileDumpMongoDB.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaibhavbhuva/hotornot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vaibhavbhuva/hotornot/issues"
+  },
+  "homepage": "https://github.com/vaibhavbhuva/hotornot#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "fs-extra": "^8.1.0",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.6.9",
+    "readdirp": "^3.1.2",
+    "xlsx": "^0.15.1"
+  }
+}

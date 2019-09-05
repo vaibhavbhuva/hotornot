@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <title>File compare</title>
+    <style>
+      .flex {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .gutter.gutter-horizontal {
+        cursor: ew-resize;
+      }
+      .gutter {
+        background-color: #eee;
+
+        background-repeat: no-repeat;
+        background-position: 50%;
+      }
+
+      .gutter.gutter-horizontal {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+      }
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .heading {
+        padding: 15px;
+        background: #eeeeee;
+        text-align: center;
+        font-weight: 800;
+        color: #0062cc;
+        letter-spacing: 2px;
+      }
+      .button {
+        border-radius: 4px;
+        background-color: #f4511e;
+        border: none;
+        color: #ffffff;
+        text-align: center;
+        font-size: 28px;
+        padding: 20px;
+        width: 200px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+      }
+      iframe {
+        display: block; /* iframes are inline by default */
+        border: none; /* Reset default border */
+        height: 100vh; /* Viewport-relative units */
+        width: 100%;
+      }
+      #imageCount {
+        position: fixed;
+        left: 50%;
+        top: 2%;
+        transform: translate(-50%, -10%);
+        font-size: 22px;
+        font-weight: 800;
+        background-color: white;
+        padding: 0 10px;
+        border-radius: 26px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="flex">
+      <div id="one" class="split">
+        <div class="heading">
+          WORD DOCUMENT PREVIEW
+        </div>
+        <img id="docImg" src="" />
+      </div>
+      <div id="two" class="split">
+        <div class="heading">
+          CKEDITOR HTML PREVIEW
+        </div>
+        <img id="htmlImg" src="" />
+      </div>
+    </div>
+    <div id="imageCount">
+      1/5
+    </div>
+    <div style="position:fixed;left: 41%;margin-left: -83px;bottom: 20px;">
+      <button
+        onclick="updateStatus('correct',1)"
+        class="button"
+        style="
+    background-color: #0062cc;"
+      >
+        Correct
+      </button>
+      <button
+        onclick="updateStatus('Incorrect',1)"
+        class="button"
+        style="
+    background-color: #fc3e3e;"
+      >
+        Incorrect
+      </button>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.11/split.min.js"></script>
+    <script>
+      Split(['#one', '#two'], {
+        sizes: [50, 50]
+      });
+      const SERVER_URL = 'http://localhost:3000/';
+      var images = JSON.parse('<%- results %>');
+      images = images.images;
+      console.table(images);
+      var slideIndex = 1;
+      showSlides(slideIndex);
+
+      function plusSlides(n) {
+        showSlides((slideIndex += n));
+      }
+
+      function showSlides(n) {
+        if (n > images.length) {
+          alert('DONE!!');
+          window.location.replace(SERVER_URL);
+          slideIndex = 1;
+        }
+        console.log('slideIndex', slideIndex);
+        $('#docImg').attr(
+          'src',
+          `/data/docImages/${images[slideIndex - 1]['filecode']}.png`
+        );
+        $('#htmlImg').attr(
+          'src',
+          `/data/htmlImages/${images[slideIndex - 1]['filecode']}.jpg`
+        );
+        $('#imageCount').html(`${slideIndex}/${images.length}`);
+      }
+      function updateStatus(status, index) {
+        let reqBody = {
+          status: status,
+          imageId: images[slideIndex - 1]['_id']
+        };
+        $.ajax({
+          url: `${SERVER_URL}image/status/update/`,
+          data: { data: reqBody },
+          type: 'POST',
+          dataType: 'json',
+          success: function(data) {
+            plusSlides(index);
+          },
+          error: function(xhr, status, error) {
+            alert('Something went wrong! Please try again later');
+            console.error('Error: ' + error.message);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
