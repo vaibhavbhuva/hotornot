@@ -1,3 +1,3 @@
 # hotornot
 
-Image File compare tool
+Image File compare tool.
