@@ -24,7 +24,7 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.6.9",
+    "mongoose": "^5.7.5",
     "readdirp": "^3.1.2",
     "xlsx": "^0.15.1"
   }
